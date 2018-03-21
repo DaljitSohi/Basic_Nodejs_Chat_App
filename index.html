@@ -63,7 +63,9 @@
       // and Call the addMessage() method to append all the messages to the '#allmessages' div
       function getMessages(){
         //Get Messages from the Database
-        $.get('http://localhost:3000/messages', function(data){
+        $.get('http://18.188.128.66/messages', function(data){
+             //http://localhost:3000/messages
+             //18.188.128.66 is the public IP address of my ubuntu server on EC2
 
           //for each 'new Data' -> call the addMessage method
           data.forEach(addMessage);
@@ -71,7 +73,10 @@
       }
 
       function postMessages(message){
-        $.post('http://localhost:3000/messages', message);
+
+        // $.post('http://localhost:3000/messages', message);
+        //18.188.128.66 is the public IP address of my ubuntu server on EC2
+        $.post('http://18.188.128.66/messages', message);
       }
 
       //'newUser' event triggerd by the server -> Call the newUser_Msg
