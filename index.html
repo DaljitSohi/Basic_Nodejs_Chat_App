@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Web Chat App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!--socket.io.js is automatically added by node-->
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <br>
+      <h1
+      style="text-align: center;
+      color: #F33541;
+      font-weight: bold;
+      font-family: Impact,Charcoal,sans-serif;"
+      > Web Chat App</h1>
+      <div>
+        <div id="allmessages" style="overflow-y: scroll; height:600px;">
+
+        </div>
+        <p id="newUser_Message" style="background-color: #D4F3C7; display:none;"> A new user has joined the chat....</p>
+      </div>
+      <br>
+      <div style="background-color: #F3EFC7;">
+        <h4 class="display-6">Send a Message: </h4>
+        <input id="name" class="form-control" placeholder="Name">
+        <textarea id="message" class="form-control" placeholder="Message"></textarea>
+        <button id="send" class="btn btn-success">Send</button>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+
+      //This tries to make a connection to the socket.io
+      var socket = io();
+
+      //DOM Events
+      $(document).ready(function(){
+        $("#send").on('click', function(){
+              var message = {name: $("#name").val(), message: $("#message").val()}
+
+              //Post the Message to the DataBase
+              postMessages(message);
+        });
+
+        //Retrive all the messages, and Display them to the user
+        getMessages();
+      });
+
+      //On 'message' event -> call method 'addMessage'
+      socket.on('message', addMessage);
+      function addMessage(message){
+        //append a new message to div with id->'messages'
+        $('#allmessages').append(`<p> <strong>${message.name}:</strong> ${message.message}</p>`);
+      }
+
+      //Get all the Message from the Database,
+      // and Call the addMessage() method to append all the messages to the '#allmessages' div
+      function getMessages(){
+        //Get Messages from the Database
+        $.get('http://localhost:3000/messages', function(data){
+
+          //for each 'new Data' -> call the addMessage method
+          data.forEach(addMessage);
+        });
+      }
+
+      function postMessages(message){
+        $.post('http://localhost:3000/messages', message);
+      }
+
+      //'newUser' event triggerd by the server -> Call the newUser_Msg
+      socket.on('newUser', newUser_Msg);
+      function newUser_Msg(){
+            $('#newUser_Message').fadeIn('slow', function(){
+              $('#newUser_Message').delay(3000).fadeOut();
+            })
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "demo_chat",
+  "version": "1.0.0",
+  "description": "A basic Demo Chat -> Learning NodeJS",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.4",
+    "nodemon": "^1.17.2",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Daljit Sohi",
+  "license": "ISC"
+}
