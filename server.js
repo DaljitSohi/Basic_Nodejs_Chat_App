@@ -2,6 +2,9 @@
 const express = require('express');
 var app = express(); //Instace of express
 
+var cors = require('cors');
+app.use(cors());
+
 /*Setting Up Socket.io
   1st. Setting up 'http' Server with node, and connect it to express
   2nd. Setting up the 'socket.io' package, and passing a reference to the http server.
